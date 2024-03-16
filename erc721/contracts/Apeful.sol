@@ -2,6 +2,7 @@
 // Compatible with OpenZeppelin Contracts ^5.0.0
 pragma solidity ^0.8.24;
 
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
@@ -15,7 +16,7 @@ interface IOracle {
     ) external returns (uint i);
 }
 
-contract Apeful is ERC721URIStorage, ERC721Enumerable, ERC721Burnable {
+contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable {
     uint256 private _nextTokenId;
 
     struct MintInput {
@@ -29,6 +30,7 @@ contract Apeful is ERC721URIStorage, ERC721Enumerable, ERC721Burnable {
 
     event MintInputCreated(address indexed owner, uint indexed chatId);
 
+    address private owner;
     address public oracleAddress;
 
     string public prompt;
@@ -91,7 +93,7 @@ contract Apeful is ERC721URIStorage, ERC721Enumerable, ERC721Burnable {
     function onOracleFunctionResponse(
         uint runId,
         string memory response,
-        string memory errorMessage
+        string memory
     ) public onlyOracle {
         MintInput storage mintInput = mintInputs[runId];
         require(!mintInput.isMinted, "NFT already minted");
@@ -119,10 +121,19 @@ contract Apeful is ERC721URIStorage, ERC721Enumerable, ERC721Burnable {
         super._increaseBalance(account, value);
     }
 
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable)
+        override(ERC721, ERC721Enumerable, ERC721URIStorage)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
