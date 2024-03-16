@@ -1,0 +1,14 @@
+galadriel:
+  name: galadriel
+  chainId: 696969
+  domainId: 696969
+  protocol: ethereum
+  rpcUrls:
+    - http: https://testnet.galadriel.com/
+  blocks:
+    confirmations: 1
+    reorgPeriod: 5
+    estimateBlockTime: 1
+  transactionOverrides:
+    gasPrice: 2000000000
+

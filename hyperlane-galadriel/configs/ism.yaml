@@ -1,0 +1,5 @@
+galadriel:
+  threshold: 1
+  validators:
+    - "0x2C23d4a3b26255C356A7BAf95175097cFB84D497"
+
