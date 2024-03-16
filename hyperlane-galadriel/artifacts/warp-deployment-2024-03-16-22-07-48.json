@@ -1,0 +1,10 @@
+{
+  "galadriel": {
+    "router": "0x1643ebA8D98Ca7408a755795E9bba09649762133",
+    "tokenType": "collateral"
+  },
+  "sepolia": {
+    "router": "0x608Cbba68C07ba3139c7eB509CFdf0D0255381Ea",
+    "tokenType": "synthetic"
+  }
+}

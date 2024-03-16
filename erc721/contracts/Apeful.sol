@@ -45,6 +45,8 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable, IMessageRecipient
     address public oracleAddress;
     address public tokenRouterAddress;
 
+    bool public bridgingEnabled = false;
+
     string public prompt;
 
     event PromptUpdated(string indexed newPrompt);
@@ -83,10 +85,13 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable, IMessageRecipient
         tokenRouterAddress = newTokenRouterAddress;
     }
 
+    function setBridgingEnabled(bool enabled) public onlyOwner {
+        bridgingEnabled = enabled;
+    }
     function initializeMint(address recipient, string memory message) public returns (uint i) {
         MintInput storage mintInput = mintInputs[mintsCount];
 
-        mintInput.owner = msg.sender;
+        mintInput.owner = address(this);
         mintInput.recipient = recipient;
         mintInput.prompt = message;
         mintInput.isMinted = false;
@@ -121,16 +126,25 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable, IMessageRecipient
         _mint(mintInput.owner, tokenId);
         _setTokenURI(tokenId, response);
 
-        // initiate to send the nft to sepolia
-        TokenRouter router = TokenRouter(tokenRouterAddress);
-        router.transferRemote(
-            11155111,
-            bytes32(uint256(uint160(mintInput.recipient)) << 96),
-            tokenId
-        );
+        if (bridgingEnabled) {
+            bridgeToSepolia(tokenId, mintInput.recipient);
+        }
     }
     // The following functions are overrides required by Solidity.
 
+    function setApproval() public {
+        ERC721 _erc721 = ERC721(address(this));
+        _erc721.setApprovalForAll(tokenRouterAddress, true);
+    }
+
+    function bridgeToSepolia(uint256 tokenId, address recipient) public {
+        TokenRouter router = TokenRouter(tokenRouterAddress);
+        router.transferRemote(
+            11155111,
+            bytes32(uint256(uint160(recipient))),
+            tokenId
+        );
+    }
     function _beforeTokenTransfer(
         address from,
         address to,

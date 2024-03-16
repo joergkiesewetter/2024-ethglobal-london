@@ -1,0 +1,10 @@
+{
+  "chainId": 696969,
+  "name": "Apeful",
+  "symbol": "AF",
+  "decimals": 0,
+  "type": "collateral",
+  "address": "0xB2cB8f619ad5b1eA98633ae88524C0a6480775C8",
+  "hypCollateralAddress": "0x956541542D2F15f2d90e15E8158F057efBB63a22",
+  "isNft": true
+}

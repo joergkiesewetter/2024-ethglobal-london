@@ -31,5 +31,15 @@ DEPLOYER_PRIVATE_KEY=<private key>
 ```
 cd ..
 cd erc721
-npx hardhat deploy
+npx hardhat ignition deploy ./ignition/modules/Apeful.ts --network galadriel
 ```
+
+- deploy warp route
+- set warp router at token contract
+
+
+# flow
+
+- make swap
+- do approval
+- send nft back
