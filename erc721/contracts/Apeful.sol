@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@hyperlane-xyz/core/contracts/token/libs/TokenRouter.sol";
 
 interface IOracle {
     function createFunctionCall(
@@ -16,11 +17,21 @@ interface IOracle {
     ) external returns (uint i);
 }
 
-contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable {
+// the message recipient interface for hyperlane
+interface IMessageRecipient {
+    function handle(
+        uint32 _origin,
+        bytes32 _sender,
+        bytes calldata _message
+    ) external payable;
+}
+
+contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable, IMessageRecipient {
     uint256 private _nextTokenId;
 
     struct MintInput {
         address owner;
+        address recipient;
         string prompt;
         bool isMinted;
     }
@@ -32,6 +43,7 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable {
 
     address private owner;
     address public oracleAddress;
+    address public tokenRouterAddress;
 
     string public prompt;
 
@@ -67,10 +79,15 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable {
         emit OracleAddressUpdated(newOracleAddress);
     }
 
-    function initializeMint(string memory message) public returns (uint i) {
+    function setTokenRouterAddress(address newTokenRouterAddress) public onlyOwner {
+        tokenRouterAddress = newTokenRouterAddress;
+    }
+
+    function initializeMint(address recipient, string memory message) public returns (uint i) {
         MintInput storage mintInput = mintInputs[mintsCount];
 
         mintInput.owner = msg.sender;
+        mintInput.recipient = recipient;
         mintInput.prompt = message;
         mintInput.isMinted = false;
 
@@ -103,6 +120,14 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable {
         uint256 tokenId = _nextTokenId++;
         _mint(mintInput.owner, tokenId);
         _setTokenURI(tokenId, response);
+
+        // initiate to send the nft to sepolia
+        TokenRouter router = TokenRouter(tokenRouterAddress);
+        router.transferRemote(
+            11155111,
+            bytes32(uint256(uint160(mintInput.recipient)) << 96),
+            tokenId
+        );
     }
     // The following functions are overrides required by Solidity.
 
@@ -137,5 +162,15 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable {
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    function handle(
+        uint32,
+        bytes32,
+        bytes calldata _message
+    ) external payable {
+        (address recipient, uint256 message) = abi.decode(_message, (address, string));
+
+        initializeMint(recipient, message);
     }
 }
