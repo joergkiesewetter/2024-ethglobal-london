@@ -10,12 +10,12 @@
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "@openzeppelin/contracts": "^5.0.2",
+    "@openzeppelin/contracts": "4.9.6",
     "dotenv": "^16.4.5",
     "hardhat": "^2.22.1",
     "ethers": "^6.11.1"
   },
   "dependencies": {
-    "@hyperlane-xyz/core": "^3.8.1",
+    "@hyperlane-xyz/core": "^3.8.1"
   }
 }

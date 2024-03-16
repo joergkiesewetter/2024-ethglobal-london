@@ -131,20 +131,25 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable, IMessageRecipient
     }
     // The following functions are overrides required by Solidity.
 
-    function _update(address to, uint256 tokenId, address auth)
-        internal
-        override(ERC721, ERC721Enumerable)
-        returns (address)
-    {
-        return super._update(to, tokenId, auth);
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 firstTokenId,
+        uint256 batchSize
+    ) internal virtual override(ERC721, ERC721Enumerable) {
+        return super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
     }
 
-    function _increaseBalance(address account, uint128 value)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
-        super._increaseBalance(account, value);
+    function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721URIStorage){
+        return super._burn(tokenId);
     }
+
+    // function _increaseBalance(address account, uint128 value)
+    //     internal
+    //     override(ERC721, ERC721Enumerable)
+    // {
+    //     super._increaseBalance(account, value);
+    // }
 
     function tokenURI(uint256 tokenId)
         public
@@ -169,7 +174,7 @@ contract Apeful is ERC721, ERC721URIStorage, ERC721Enumerable, IMessageRecipient
         bytes32,
         bytes calldata _message
     ) external payable {
-        (address recipient, uint256 message) = abi.decode(_message, (address, string));
+        (address recipient, string memory message) = abi.decode(_message, (address, string));
 
         initializeMint(recipient, message);
     }
