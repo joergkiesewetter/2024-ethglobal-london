@@ -1,0 +1,26 @@
+# A config for a Warp Route deployment
+# Typically used with the 'hyperlane deploy warp' command
+#
+# Token Types:
+#   native
+#   collateral
+#   synthetic
+#   collateralUri
+#   syntheticUri
+#   fastCollateral
+#   fastSynthetic
+---
+base:
+  chainName: galadriel
+  type: collateral
+  address: "0x6c468BbD8b86a3b3B240E31e3BA9E0A4f2DB03BF"
+  isNft: true
+  # owner: 0x123 # Optional owner address for synthetic token
+  # mailbox: 0x123 # Optional mailbox address route
+  # interchainGasPaymaster: 0x123 # Optional interchainGasPaymaster address
+synthetics:
+  - chainName: sepolia
+    # You can optionally set the token metadata, otherwise the base token's will be used
+    name: "Apeful"
+    symbol: "AF"
+  # totalSupply: 10000000
