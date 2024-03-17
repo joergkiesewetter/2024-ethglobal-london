@@ -25,7 +25,7 @@ abstract contract BaseHook is IHooks {
 
     constructor(IPoolManager _poolManager) {
         poolManager = _poolManager;
-        validateHookPermissions(this);
+        validateHookAddress(this);
     }
 
     /// @dev Only the pool manager may call this function
@@ -51,11 +51,11 @@ abstract contract BaseHook is IHooks {
     // this function is virtual so that we can override it during testing,
     // which allows us to deploy an implementation to any address
     // and then etch the bytecode into the correct address
-    function validateHookPermissions(BaseHook _this) internal pure virtual {
+    function validateHookAddress(BaseHook _this) internal pure virtual {
         Hooks.validateHookPermissions(_this, getHookPermissions());
     }
 
-    function lockAcquired(address, bytes calldata data) external virtual poolManagerOnly returns (bytes memory) {
+    function lockAcquired(bytes calldata data) external virtual poolManagerOnly returns (bytes memory) {
         (bool success, bytes memory returnData) = address(this).call(data);
         if (success) return returnData;
         if (returnData.length == 0) revert LockFailure();
@@ -86,20 +86,20 @@ abstract contract BaseHook is IHooks {
         revert HookNotImplemented();
     }
 
-    function afterAddLiquidity(
+    function beforeRemoveLiquidity(
         address,
         PoolKey calldata,
         IPoolManager.ModifyLiquidityParams calldata,
-        BalanceDelta,
         bytes calldata
     ) external virtual returns (bytes4) {
         revert HookNotImplemented();
     }
 
-    function beforeRemoveLiquidity(
+    function afterAddLiquidity(
         address,
         PoolKey calldata,
         IPoolManager.ModifyLiquidityParams calldata,
+        BalanceDelta,
         bytes calldata
     ) external virtual returns (bytes4) {
         revert HookNotImplemented();

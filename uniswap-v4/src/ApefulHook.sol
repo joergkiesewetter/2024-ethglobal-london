@@ -62,6 +62,8 @@ contract ApefulHook is BaseHook {
                 apefulRemoteAddress, 
                 abi.encode(user, message));
         }
+
+        return this.beforeSwap.selector;
     }
 
     // Helper function for demonstration
@@ -74,8 +76,8 @@ contract ApefulHook is BaseHook {
             beforeInitialize: false,
             afterInitialize: false,
             beforeAddLiquidity: false,
-            beforeRemoveLiquidity: false,
             afterAddLiquidity: false,
+            beforeRemoveLiquidity: false,
             afterRemoveLiquidity: false,
             beforeSwap: true,
             afterSwap: false,
