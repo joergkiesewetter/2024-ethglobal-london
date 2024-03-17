@@ -23,7 +23,7 @@ async function main() {
   //   )
   // );
 
-  console.log(await nftContract.setBridgingEnabled(false));
+  console.log(await nftContract.setBridgingEnabled(true));
 }
 
 // We recommend this pattern to be able to use async/await everywhere
