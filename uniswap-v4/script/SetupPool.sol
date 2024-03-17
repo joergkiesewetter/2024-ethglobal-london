@@ -24,7 +24,7 @@ contract SetupPool is Script {
         ApeCoin apeCoin = new ApeCoin(deployerPublicKey);
         USDC usdc = new USDC(deployerPublicKey);
 
-        ApefulHook hook = new ApefulHook(poolManager, hyperlaneMailboxAddress, address(apeCoin));
+        ApefulHook hook = new ApefulHook(poolManager, hyperlaneMailboxAddress, address(apeCoin), apefulRemoteAddress);
 
         PoolInitialize poolInitialize = new PoolInitialize();
 
