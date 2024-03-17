@@ -1,0 +1,16 @@
+node_modules/
+cache/
+artifacts/
+types/
+dist/
+coverage/
+coverage.json
+storage/
+.env
+*lcov.info
+# Foundry
+out
+forge-cache
+docs
+flattened/
+buildArtifact.json

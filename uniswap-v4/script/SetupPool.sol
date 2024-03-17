@@ -16,13 +16,15 @@ contract SetupPool is Script {
         uint256 deployerPrivateKey = vm.envUint("DEPLOYER_PRIVATE_KEY");
 
         IPoolManager poolManager = IPoolManager(vm.envAddress("SEPOLIA_POOL_MANAGER"));
+        address hyperlaneMailboxAddress = vm.envAddress("SEPOLIA_HYPERLANE_MAILBOX");
+        address apefulRemoteAddress = vm.envAddress("GALADRIEL_APEFUL_ADDRESS");
 
         vm.startBroadcast(deployerPrivateKey);
 
         ApeCoin apeCoin = new ApeCoin(deployerPublicKey);
         USDC usdc = new USDC(deployerPublicKey);
 
-        ApefulHook hook = new ApefulHook(poolManager);
+        ApefulHook hook = new ApefulHook(poolManager, hyperlaneMailboxAddress, address(apeCoin));
 
         PoolInitialize poolInitialize = new PoolInitialize();
 

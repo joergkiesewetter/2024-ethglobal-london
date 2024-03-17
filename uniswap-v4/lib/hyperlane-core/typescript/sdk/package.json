@@ -1,0 +1,76 @@
+{
+  "name": "@hyperlane-xyz/sdk",
+  "description": "The official SDK for the Hyperlane Network",
+  "version": "3.8.1",
+  "dependencies": {
+    "@cosmjs/cosmwasm-stargate": "^0.31.3",
+    "@cosmjs/stargate": "^0.31.3",
+    "@hyperlane-xyz/core": "3.8.1",
+    "@hyperlane-xyz/utils": "3.8.1",
+    "@solana/spl-token": "^0.3.8",
+    "@solana/web3.js": "^1.78.0",
+    "@types/coingecko-api": "^1.0.10",
+    "@types/debug": "^4.1.7",
+    "@wagmi/chains": "^1.8.0",
+    "bignumber.js": "^9.1.1",
+    "coingecko-api": "^1.0.10",
+    "cosmjs-types": "^0.9.0",
+    "cross-fetch": "^3.1.5",
+    "debug": "^4.3.4",
+    "ethers": "^5.7.2",
+    "viem": "^1.20.0",
+    "zod": "^3.21.2"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^16.9.1",
+    "@types/sinon": "^17.0.1",
+    "@types/sinon-chai": "^3.2.12",
+    "@types/ws": "^8.5.5",
+    "chai": "^4.3.6",
+    "dotenv": "^10.0.0",
+    "eslint": "^8.43.0",
+    "ethereum-waffle": "^4.0.10",
+    "hardhat": "^2.19.0",
+    "mocha": "^10.2.0",
+    "prettier": "^2.8.8",
+    "sinon": "^13.0.2",
+    "ts-node": "^10.8.0",
+    "typescript": "5.1.6",
+    "yaml": "^2.3.1"
+  },
+  "files": [
+    "/dist",
+    "/logos"
+  ],
+  "homepage": "https://www.hyperlane.xyz",
+  "keywords": [
+    "Hyperlane",
+    "SDK",
+    "Typescript"
+  ],
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "repository": "https://github.com/hyperlane-xyz/hyperlane-monorepo",
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "clean": "rm -rf ./dist ./cache",
+    "lint": "eslint src --ext .ts",
+    "prepublishOnly": "yarn build",
+    "prettier": "prettier --write ./src",
+    "test": "yarn test:unit && yarn test:hardhat && yarn test:foundry",
+    "test:ci": "yarn test",
+    "test:unit": "mocha --config .mocharc.json './src/**/*.test.ts' --exit",
+    "test:hardhat": "hardhat test $(find ./src -name \"*.hardhat-test.ts\")",
+    "test:metadata": "ts-node ./src/test/metadata-check.ts",
+    "test:foundry": "./scripts/foundry-test.sh"
+  },
+  "types": "dist/index.d.ts",
+  "peerDependencies": {
+    "@ethersproject/abi": "*",
+    "@ethersproject/providers": "*"
+  }
+}
