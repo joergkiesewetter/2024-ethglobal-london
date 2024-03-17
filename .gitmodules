@@ -7,3 +7,6 @@
 [submodule "uniswap-v4/lib/openzeppelin-contracts"]
 	path = uniswap-v4/lib/openzeppelin-contracts
 	url = https://github.com/Openzeppelin/openzeppelin-contracts
+[submodule "uniswap-v4/lib/v4-by-example"]
+	path = uniswap-v4/lib/v4-by-example
+	url = https://github.com/uniswapfoundation/v4-by-example
